@@ -18,6 +18,7 @@ from langchain.prompts import PromptTemplate
 ### Create the LLM API object
 llm = OpenAI(openai_api_key=st.secrets["OPENAIKEY"])
 
+### Create the decision-making chain
 experience_template = """You are a customer agent for an airline.
 From the following text, determine whether the customer had a negative experience or not.
 
@@ -53,3 +54,14 @@ Text:
 
 """
 ) | llm
+
+from langchain_core.runnables import RunnableBranch
+
+### Routing/Branching chain
+branch = RunnableBranch(
+    (lambda x: "negative" in x["experience_type"].lower(), airline_chain),
+    general_chain,
+)
+
+### Put all the chains together
+full_chain = {"experience_type": exprience_type_chain, "text": lambda x: x["request"]} | branch
