@@ -51,7 +51,7 @@ Text:
 
 general_chain = PromptTemplate.from_template(
     """You are a customer agent for an airline.
-    Given the text below, determine the length of the traveller's journey in hours.
+    Given the text below, determine the airline is at fault for customer negative experience.
 
     Your response should follow these guidelines:
     1. You should display a message offering sympathies and inform the user that customer service will contact them soon to resolve the issue or provide compensation.
@@ -68,14 +68,15 @@ Text:
 from langchain_core.runnables import RunnableBranch
 
 ### Routing/Branching chain
+
+
 branch = RunnableBranch(
-    (lambda x: "negative" in x["experience_type"].lower(), airline_chain),general_chain,)
-
-
+    (lambda x: "negative" in x["exprience_type"].lower(), airline_chain),
+    general_chain,
+)
 
 ### Put all the chains together
 full_chain = {"experience_type": exprience_type_chain, "prompt": lambda x: x["prompt"]} | branch
-
 
 
 import langchain
