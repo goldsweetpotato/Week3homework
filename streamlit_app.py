@@ -25,7 +25,7 @@ From the following text, determine whether the customer had a negative experienc
 Do not respond with more than one word.
 
 Text:
-{request}
+{prompt}
 
 """
 
@@ -41,19 +41,29 @@ exprience_type_chain = (
 airline_chain = PromptTemplate.from_template(
     """You are a customer agent for an airline. \
 Determine if the cause of customer's dissatisfaction is the airline's fault. 
-Do not respond with any reasoning. Just respond professionally as a customer service agent. Respond in first-person mode.
-
-Your response should follow these guidelines:
-    1. Do not provide any reasoning behind the customer's dissatification. Just respond professionally as a customer agent.
-    2. Address the customer directly
-
-
+Do not respond with more than one word.
 
 Text:
-{text}
+{prompt}
 
 """
 ) | llm
+
+general_chain = PromptTemplate.from_template(
+    """You are a customer agent for an airline.
+    Given the text below, determine the length of the traveller's journey in hours.
+
+    Your response should follow these guidelines:
+    1. You will wish the traveller a safe trip and that they enjoy the next X hour, where X is the length of their flights.
+    2. Do not respond with any reasoning. Just respond professionally as a travel chat agent.
+    3. Address the customer directly
+
+Text:
+{prompt}
+
+"""
+) | llm
+
 
 from langchain_core.runnables import RunnableBranch
 
@@ -64,4 +74,9 @@ branch = RunnableBranch(
 )
 
 ### Put all the chains together
-full_chain = {"experience_type": exprience_type_chain, "text": lambda x: x["request"]} | branch
+full_chain = {"experience_type": exprience_type_chain, "prompt": lambda x: x["prompt"]} | branch
+
+import langchain
+langchain.debug = False
+
+full_chain.invoke(prompt)
