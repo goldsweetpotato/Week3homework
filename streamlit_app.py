@@ -10,12 +10,13 @@ prompt = st.text_input("Share with us your experience of the latest trip")
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAIKEY"]
 
 
-### Create the LLM API object
-llm = OpenAI()
-
 from langchain.llms import OpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
+
+
+### Create the LLM API object
+llm = OpenAI()
 
 experience_template = """You are a customer agent for an airline.
 From the following text, determine whether the customer had a negative experience or not.
