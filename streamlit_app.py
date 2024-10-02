@@ -9,19 +9,27 @@ prompt = st.text_input("Share with us your experience of the latest trip")
 ### Load your API Key
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAIKEY"]
 
-### OpenAI stuff: Creative: High temperature
-client = OpenAI()
-response = client.chat.completions.create(
-  model="gpt-4o-mini",
-  messages=[
-    {"role": "system", "content": "Complete the following prefix"},
-    {"role": "user", "content": prompt}
-  ],
-  temperature = 1.8,
-  max_tokens=20
-)
+### Create the LLM API object
+llm = OpenAI(openai_api_key=openai_api_key)
 
-### Display
-st.write(
-    "Creative: " + response.choices[0].message.content
+from langchain.llms import OpenAI
+from langchain_core.output_parsers import StrOutputParser
+
+experience_template = """You are a customer agent for an airline.
+From the following text, determine whether the customer had a negative experience or not.
+
+Do not respond with more than one word.
+
+Text:
+{request}
+
+"""
+
+
+### Create the decision-making chain
+
+exprience_type_chain = (
+    PromptTemplate.from_template(experience_template)
+    | llm
+    | StrOutputParser()
 )
