@@ -36,3 +36,20 @@ exprience_type_chain = (
     | llm
     | StrOutputParser()
 )
+
+airline_chain = PromptTemplate.from_template(
+    """You are a customer agent for an airline. \
+Determine if the cause of customer's dissatisfaction is the airline's fault. 
+Do not respond with any reasoning. Just respond professionally as a customer service agent. Respond in first-person mode.
+
+Your response should follow these guidelines:
+    1. Do not provide any reasoning behind the customer's dissatification. Just respond professionally as a customer agent.
+    2. Address the customer directly
+
+
+
+Text:
+{text}
+
+"""
+) | llm
