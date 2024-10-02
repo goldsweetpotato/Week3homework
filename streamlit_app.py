@@ -69,10 +69,14 @@ from langchain_core.runnables import RunnableBranch
 
 ### Routing/Branching chain
 branch = RunnableBranch(
-    (lambda x: "negative" in x["experience_type"].lower(), airline_chain,general_chain,))
+    (lambda x: "negative" in x["experience_type"].lower(), airline_chain),general_chain,)
+
+
 
 ### Put all the chains together
 full_chain = {"experience_type": exprience_type_chain, "prompt": lambda x: x["prompt"]} | branch
+
+
 
 import langchain
 langchain.debug = False
