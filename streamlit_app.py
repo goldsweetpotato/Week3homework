@@ -10,7 +10,7 @@ prompt = st.text_input("Share with us your experience of the latest trip")
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAIKEY"]
 
 ### Create the LLM API object
-llm = OpenAI()
+llm = OpenAI(openai_api_key=OPENAI_API_KEY)
 
 from langchain.llms import OpenAI
 from langchain_core.output_parsers import StrOutputParser
