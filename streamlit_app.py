@@ -54,8 +54,8 @@ general_chain = PromptTemplate.from_template(
     Given the text below, determine the length of the traveller's journey in hours.
 
     Your response should follow these guidelines:
-    1. You will wish the traveller a safe trip and that they enjoy the next X hour, where X is the length of their flights.
-    2. Do not respond with any reasoning. Just respond professionally as a travel chat agent.
+    1. You should display a message offering sympathies and inform the user that customer service will contact them soon to resolve the issue or provide compensation.
+    2. Do not respond with any reasoning. Just respond professionally as a custmer service agent.
     3. Address the customer directly
 
 Text:
@@ -69,7 +69,8 @@ from langchain_core.runnables import RunnableBranch
 
 ### Routing/Branching chain
 branch = RunnableBranch(
-    (lambda x: "negative" in x["experience_type"].lower(), airline_chain),
+    (lambda x: "negative" in x["experience_type"].lower()), 
+    (lambda x: "yes" in x ["airline_chain"].lower()),
     general_chain,
 )
 
