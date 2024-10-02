@@ -16,7 +16,7 @@ from langchain.prompts import PromptTemplate
 
 
 ### Create the LLM API object
-llm = OpenAI()
+llm = OpenAI(openai_api_key=st.secrets["OPENAIKEY"])
 
 experience_template = """You are a customer agent for an airline.
 From the following text, determine whether the customer had a negative experience or not.
